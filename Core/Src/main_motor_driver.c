@@ -72,9 +72,8 @@ void motor_rotate(int direction, int steps) {
 void motor_move_to(int target_pos) {
 	int delta = target_pos - motor_position; // hány lépést kell lépni
 
-	if (delta == 0) {
+	if (delta == 0)
 		return; // nincs lépés
-	}
 
 	int direction = (delta > 0) ? 1 : -1; // pozitív = jobbra(CW), negatív = balra(CCW)
 	int steps = abs(delta);
