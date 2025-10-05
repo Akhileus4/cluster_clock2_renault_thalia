@@ -501,7 +501,7 @@ int main(void) {
 
 	}
 
-//log_reset_reason();
+	log_reset_reason();
 	show_error();
 	HAL_Delay(1000);
 
