@@ -559,7 +559,7 @@ int main(void) {
 
 	log_reset_reason();
 	show_error();
-	HAL_Delay(100);
+	HAL_Delay(1000);
 
 	for (int i = 0; i < led_count; i++) {
 		if (set_led(leds[i].channel, 0) != HAL_OK) {
@@ -579,38 +579,48 @@ int main(void) {
 		Error_Handler();
 	}
 
-	if (Task_Add(task_Big_Motor, 10) != HAL_OK) {
+	if (Task_Add(task_Big_Motor, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 19, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_smotor_left, 10) != HAL_OK) {
+	if (Task_Add(task_smotor_left, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 20, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_smotor_right, 10) != HAL_OK) {
+	if (Task_Add(task_smotor_right, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 21, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_left_blink, 10) != HAL_OK) {
+	if (Task_Add(task_left_blink, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 22, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_right_blink, 10) != HAL_OK) {
+	if (Task_Add(task_right_blink, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 23, 1);
 		Error_Handler();
 
 	}
 
-	if (Task_Add(task_adc_evaluation, 1) != HAL_OK) {
+	if (Task_Add(task_adc_evaluation, 10) != HAL_OK) {
 		write_bit(&My_Error_code, 25, 1);
 		Error_Handler();
 	}
 
 	set_vaku_led(0);
+
+	HAL_Delay(1000);
+	/* USER CODE END 2 */
+
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
+	while (1) {
+		/* USER CODE END WHILE */
+
+		/* USER CODE BEGIN 3 */
 
 	HAL_Delay(100);
 	/* USER CODE END 2 */
