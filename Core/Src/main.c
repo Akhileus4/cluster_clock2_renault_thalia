@@ -74,7 +74,7 @@ void SystemClock_Config(void);
 
 void task_Big_Motor() {
 
-	static int wait_time = 1000;
+	static int wait_time = 10000;
 
 	static uint8_t state = 0;
 	static uint32_t last = 0;
@@ -86,10 +86,10 @@ void task_Big_Motor() {
 
 		//motor_rotate(-1,500);
 		//set_vaku_led(10);
-		Task_Disable(task_left_blink);
-		Task_Disable(task_right_blink);
-		set_led(INDEX_BALLRA, 0);
-		set_led(INDEX_JOBBRA, 0);
+		//	Task_Disable(task_left_blink);
+		//	Task_Disable(task_right_blink);
+		//	set_led(INDEX_BALLRA, 0);
+		//	set_led(INDEX_JOBBRA, 0);
 
 		last = now;
 		state = 1;
@@ -104,8 +104,8 @@ void task_Big_Motor() {
 			set_led(INDEX_BALLRA, 0);
 			set_led(INDEX_JOBBRA, 0);
 
-			Task_Disable(task_left_blink);
-			Task_Enable(task_right_blink);
+			Task_Enable(task_left_blink);
+			Task_Disable(task_right_blink);
 
 			last = now;
 			state = 2;
@@ -122,8 +122,8 @@ void task_Big_Motor() {
 			set_led(INDEX_BALLRA, 0);
 			set_led(INDEX_JOBBRA, 0);
 
-			Task_Disable(task_right_blink);
-			Task_Enable(task_left_blink);
+			Task_Enable(task_right_blink);
+			Task_Disable(task_left_blink);
 
 			last = now;
 			state = 1;
