@@ -1,0 +1,5 @@
+../Core/Src/tasks.c:9:6:Task_Init	2
+../Core/Src/tasks.c:18:5:Task_Add	3
+../Core/Src/tasks.c:33:6:Task_Enable	3
+../Core/Src/tasks.c:51:6:Task_Disable	3
+../Core/Src/tasks.c:69:6:Task_Dispatch	5
