@@ -1,4 +1,0 @@
-../Core/Src/main_motor_driver.c:17:6:motor_init	1
-../Core/Src/main_motor_driver.c:31:13:set_phase	1
-../Core/Src/main_motor_driver.c:43:6:motor_rotate	5
-../Core/Src/main_motor_driver.c:72:6:motor_move_to	3

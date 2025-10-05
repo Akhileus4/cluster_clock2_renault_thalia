@@ -1,6 +1,0 @@
-../Core/Src/LP5036RJVR_led_driver.c:58:5:led_driver_init	14
-../Core/Src/LP5036RJVR_led_driver.c:177:5:set_background_brightness	6
-../Core/Src/LP5036RJVR_led_driver.c:203:5:set_led	11
-../Core/Src/LP5036RJVR_led_driver.c:261:5:set_led_by_name	3
-../Core/Src/LP5036RJVR_led_driver.c:270:5:set_vaku_led	4
-../Core/Src/LP5036RJVR_led_driver.c:291:5:index_blink	3

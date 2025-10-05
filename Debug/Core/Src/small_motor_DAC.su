@@ -1,2 +1,0 @@
-../Core/Src/small_motor_DAC.c:18:5:small_motor_dac_init	8	static
-../Core/Src/small_motor_DAC.c:26:5:small_motor_set_dac	32	static
