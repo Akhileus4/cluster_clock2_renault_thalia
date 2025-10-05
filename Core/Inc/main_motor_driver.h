@@ -7,6 +7,7 @@
 void motor_init(void);
 void motor_rotate(int direction, int steps);
 void motor_move_to(int target_pos);
+void motor_move_to_kmh(int kmh);
 
 extern int motor_position;
 
