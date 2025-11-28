@@ -161,8 +161,8 @@ int main(void) {
 //  motor inits
 	motor_init();
 
-	Button_Init(&btnHour, MINUTE_GPIO_Port, MINUTE_Pin);
-	Button_Init(&btnMin, HOUR_GPIO_Port, HOUR_Pin);
+	Button_Init(&btnMin, MINUTE_GPIO_Port, MINUTE_Pin);
+	Button_Init(&btnHour, HOUR_GPIO_Port, HOUR_Pin);
 
 	set_vaku_led(0);
 
@@ -197,35 +197,39 @@ int main(void) {
 		 */
 
 		switch (Button_Update(&btnMin)) {
-		case BTN_NO_EVENT:
-
-			set_led(MENETFENY, 0);
-
-			break;
-
 		case BTN_SHORT_PRESSED:
-
 			set_led(MENETFENY, 10);
-
 			break;
-
 		case BTN_SHORT_RELEASED:
 			set_led(MENETFENY, 0);
-
 			break;
-
 		case BTN_LONG_PRESSED:
-
 			set_led(MENETFENY, 100);
-
 			break;
-
 		case BTN_LONG_RELEASED:
-
 			set_led(MENETFENY, 0);
-
 			break;
+		case BTN_NO_EVENT:
+			// Semmi! Hagyd meg az előző állapotot.
+			break;
+		}
 
+		switch (Button_Update(&btnHour)) {
+		case BTN_SHORT_PRESSED:
+			set_vaku_led(10);
+			break;
+		case BTN_SHORT_RELEASED:
+			set_vaku_led(0);
+			break;
+		case BTN_LONG_PRESSED:
+			set_vaku_led(100);
+			break;
+		case BTN_LONG_RELEASED:
+			set_vaku_led(0);
+			break;
+		case BTN_NO_EVENT:
+			// Semmi! Hagyd meg az előző állapotot.
+			break;
 		}
 
 		Task_Dispatch();
