@@ -88,6 +88,10 @@ void show_error();
 #define LED_I2C_CLK_GPIO_Port GPIOB
 #define LED_IC2_DATA_Pin GPIO_PIN_11
 #define LED_IC2_DATA_GPIO_Port GPIOB
+#define MINUTE_Pin GPIO_PIN_12
+#define MINUTE_GPIO_Port GPIOB
+#define HOUR_Pin GPIO_PIN_13
+#define HOUR_GPIO_Port GPIOB
 #define SERVO1_Pin GPIO_PIN_8
 #define SERVO1_GPIO_Port GPIOA
 #define JBM_I2C_CLK_Pin GPIO_PIN_9
