@@ -61,6 +61,9 @@ uint32_t My_Error_code = 0;
 
 /* USER CODE BEGIN PV */
 
+uint8_t time_minute = 0;
+uint8_t my_hour = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -169,6 +172,7 @@ int main(void) {
 	Task_Enable(task_adc_evaluation);
 
 	HAL_Delay(1000);
+
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -179,15 +183,17 @@ int main(void) {
 		/* USER CODE BEGIN 3 */
 
 		if (!HAL_GPIO_ReadPin(HOUR_GPIO_Port, HOUR_Pin)) {
-			set_led(HATSO_KOD, 100);
+			set_vaku_led(100);
 		} else {
-			set_led(HATSO_KOD, 0);
+			set_vaku_led(0);
 		}
 		if (!HAL_GPIO_ReadPin(MINUTE_GPIO_Port, MINUTE_Pin)) {
-			set_led(ELSO_KOD, 100);
+			set_led(MENETFENY, 100);
 		} else {
-			set_led(ELSO_KOD, 0);
+			set_led(MENETFENY, 0);
+
 		}
+
 		Task_Dispatch();
 
 	}
