@@ -624,9 +624,8 @@ int main(void) {
 
 		Task_Dispatch();
 
-		}
-		/* USER CODE END 3 */
 	}
+	/* USER CODE END 3 */
 }
 
 /**
