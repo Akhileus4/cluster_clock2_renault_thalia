@@ -186,19 +186,19 @@ int main(void) {
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
+		/*
+		 if (!HAL_GPIO_ReadPin(HOUR_GPIO_Port, HOUR_Pin)) {
+		 set_vaku_led(100);
+		 } else {
+		 set_vaku_led(0);
+		 }
+		 if (!HAL_GPIO_ReadPin(MINUTE_GPIO_Port, MINUTE_Pin)) {
+		 set_led(MENETFENY, 100);
+		 } else {
+		 set_led(MENETFENY, 0);
 
-		if (!HAL_GPIO_ReadPin(HOUR_GPIO_Port, HOUR_Pin)) {
-			set_vaku_led(100);
-		} else {
-			set_vaku_led(0);
-		}
-		if (!HAL_GPIO_ReadPin(MINUTE_GPIO_Port, MINUTE_Pin)) {
-			set_led(MENETFENY, 100);
-		} else {
-			set_led(MENETFENY, 0);
-
-		}
-
+		 }
+		 */
 		Task_Dispatch();
 
 	}
