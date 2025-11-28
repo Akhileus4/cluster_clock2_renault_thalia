@@ -1,5 +1,6 @@
 "./Core/Src/LP5036RJVR_led_driver.o"
 "./Core/Src/adc.o"
+"./Core/Src/button.o"
 "./Core/Src/crc.o"
 "./Core/Src/dma.o"
 "./Core/Src/gpio.o"

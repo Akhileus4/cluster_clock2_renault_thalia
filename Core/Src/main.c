@@ -178,12 +178,21 @@ int main(void) {
 
 		/* USER CODE BEGIN 3 */
 
+		if (!HAL_GPIO_ReadPin(HOUR_GPIO_Port, HOUR_Pin)) {
+			set_led(HATSO_KOD, 100);
+		} else {
+			set_led(HATSO_KOD, 0);
+		}
+		if (!HAL_GPIO_ReadPin(MINUTE_GPIO_Port, MINUTE_Pin)) {
+			set_led(ELSO_KOD, 100);
+		} else {
+			set_led(ELSO_KOD, 0);
+		}
 		Task_Dispatch();
 
 	}
 	/* USER CODE END 3 */
 }
-
 /**
  * @brief System Clock Configuration
  * @retval None
