@@ -622,39 +622,10 @@ int main(void) {
 
 		/* USER CODE BEGIN 3 */
 
-		HAL_Delay(100);
-		/* USER CODE END 2 */
+		Task_Dispatch();
 
-//	Task_Disable(task_Big_Motor); //temporary disable
-		HAL_Delay(1000);
-		/* USER CODE END 2 */
-
-		/* Infinite loop */
-		/* USER CODE BEGIN WHILE */
-		while (1) {
-			/* USER CODE END WHILE */
-
-			/* USER CODE BEGIN 3 */
-			/*
-			 motor_move_to_kmh(0);
-			 HAL_Delay(1000);
-			 motor_move_to_kmh(50);
-			 HAL_Delay(1000);
-			 motor_move_to_kmh(140);
-			 HAL_Delay(1000);
-			 motor_move_to_kmh(180);
-			 HAL_Delay(1000);
-			 motor_move_to_kmh(20);
-			 HAL_Delay(1000);
-			 motor_move_to_kmh(80);
-			 HAL_Delay(1000);
-			 */
-//		set_led(CHECK_ENGINE, 100);
-			Task_Dispatch();
-
-		}
-		/* USER CODE END 3 */
 	}
+	/* USER CODE END 3 */
 }
 
 /**
