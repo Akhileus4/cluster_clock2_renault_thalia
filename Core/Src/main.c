@@ -61,9 +61,6 @@ uint32_t My_Error_code = 0;
 
 /* USER CODE BEGIN PV */
 
-uint8_t time_minute = 0;
-uint8_t my_hour = 0;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
