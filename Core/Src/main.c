@@ -37,7 +37,8 @@
 #include "tasks.h"
 #include "stdio.h"
 #include "stdbool.h"
-
+#include "button.h"
+#include "time_set.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -60,6 +61,8 @@ uint32_t My_Error_code = 0;
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+Button_t btnHour;
+Button_t btnMin;
 
 /* USER CODE END PV */
 
@@ -157,6 +160,11 @@ int main(void) {
 
 //  motor inits
 	motor_init();
+
+	Button_Init(&btnHour, MINUTE_GPIO_Port, MINUTE_Pin);
+	Button_Init(&btnMin, HOUR_GPIO_Port, HOUR_Pin);
+
+	TimeSet_Init(&btnHour, &btnMin);
 
 	set_vaku_led(0);
 
@@ -398,6 +406,21 @@ void show_error() {
 			}
 		}
 	}
+}
+
+void HAL_SYSTICK_Callback(void) {
+
+	ButtonEvent_t eH = Button_Update(&btnHour);
+	ButtonEvent_t eM = Button_Update(&btnMin);
+
+	if (eH != BTN_NO_EVENT) {
+		printf("HOUR event = %d\n", eH);
+	}
+	if (eM != BTN_NO_EVENT) {
+		printf("MIN event = %d\n", eM);
+	}
+
+	TimeSet_Tick();    // 1ms tick a beállító logikához
 }
 
 /* USER CODE END 4 */
