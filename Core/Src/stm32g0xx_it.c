@@ -129,6 +129,8 @@ void SysTick_Handler(void)
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
+	HAL_SYSTICK_IRQHandler();    // ← ezt add hozzá
+
   /* USER CODE END SysTick_IRQn 1 */
 }
 

@@ -1,26 +1,29 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    rtc.c
-  * @brief   This file provides code for the configuration
-  *          of the RTC instances.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    rtc.c
+ * @brief   This file provides code for the configuration
+ *          of the RTC instances.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "rtc.h"
 
 /* USER CODE BEGIN 0 */
+
+RTC_TimeTypeDef sTime = { 0 };
+RTC_DateTypeDef sDate = { 0 };
 
 /* USER CODE END 0 */
 
@@ -38,6 +41,13 @@ void MX_RTC_Init(void)
   RTC_DateTypeDef sDate = {0};
 
   /* USER CODE BEGIN RTC_Init 1 */
+
+	HAL_MspInit();
+	__HAL_RCC_LSE_CONFIG(RCC_LSE_ON);
+	while (__HAL_RCC_GET_FLAG(RCC_FLAG_LSERDY) == RESET)
+		;
+	__HAL_RCC_RTC_CONFIG(RCC_RTCCLKSOURCE_LSE);
+	__HAL_RCC_RTC_ENABLE();
 
   /* USER CODE END RTC_Init 1 */
 
@@ -63,7 +73,7 @@ void MX_RTC_Init(void)
 
   /** Initialize RTC and set the Time and Date
   */
-  sTime.Hours = 0x0;
+  sTime.Hours = 0x3;
   sTime.Minutes = 0x0;
   sTime.Seconds = 0x0;
   sTime.SubSeconds = 0x0;
@@ -135,5 +145,21 @@ void HAL_RTC_MspDeInit(RTC_HandleTypeDef* rtcHandle)
 }
 
 /* USER CODE BEGIN 1 */
+
+void RTC_SetTimeToZero(void) {
+	RTC_TimeTypeDef sTime = { 0 };
+	RTC_DateTypeDef sDate = { 0 };
+
+	sTime.Hours = 0;
+	sTime.Minutes = 0;
+	sTime.Seconds = 0;
+
+	sDate.Date = 1;
+	sDate.Month = 1;
+	sDate.Year = 24;   // év mindegy, hogy 24, 00, stb.
+
+	HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+	HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+}
 
 /* USER CODE END 1 */

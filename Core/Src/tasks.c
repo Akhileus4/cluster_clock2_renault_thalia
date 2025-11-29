@@ -10,7 +10,7 @@ Task_t tasks[MAX_TASKS];
 
 void task_Big_Motor() {
 
-	static int wait_time = 1000;
+	static int wait_time = 3000;
 
 	static uint8_t state = 0;
 	static uint32_t last = 0;
@@ -286,7 +286,7 @@ void task_smotor_right() {
 
 void task_left_blink() {
 
-	static int wait_time = 60;
+	static int wait_time = 333;
 
 	static uint8_t state = 0;
 	static uint32_t last = 0;
@@ -334,7 +334,7 @@ void task_left_blink() {
 
 void task_right_blink() {
 
-	static int wait_time = 50;
+	static int wait_time = 333;
 
 	static uint8_t state = 0;
 	static uint32_t last = 0;
