@@ -102,13 +102,22 @@ void motor_move_to_kmh(int kmh) {
 		if (i < map_size - 1 && kmh > position_map[i].kmh
 				&& kmh < position_map[i + 1].kmh) {
 			// Lineáris interpoláció a két pont között
-			int kmh1 = position_map[i].kmh;
-			int pos1 = position_map[i].position;
-			int kmh2 = position_map[i + 1].kmh;
-			int pos2 = position_map[i + 1].position;
 
-			target_position = pos1
-					+ (kmh - kmh1) * (pos2 - pos1) / (kmh2 - kmh1);
+			/*
+			 int kmh1 = position_map[i].kmh;
+			 int pos1 = position_map[i].position;
+			 int kmh2 = position_map[i + 1].kmh;
+			 int pos2 = position_map[i + 1].position;
+
+			 target_position = pos1 + (kmh - kmh1) * (pos2 - pos1) / (kmh2 - kmh1);
+
+			 */
+
+			target_position = position_map[i].position
+					+ (kmh - position_map[i].kmh)
+							* (position_map[i + 1].position
+									- position_map[i].position)
+							/ (position_map[i + 1].kmh - position_map[i].kmh);
 			break;
 		}
 	}
