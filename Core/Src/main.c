@@ -171,10 +171,12 @@ int main(void) {
 	set_vaku_led(0);
 
 	//Task_Enable(task_Big_Motor);
-	Task_Enable(task_left_blink);
-	Task_Enable(task_right_blink);
-	Task_Enable(task_smotor_right);
-	Task_Enable(task_smotor_left);
+	/*
+	 Task_Enable(task_left_blink);
+	 Task_Enable(task_right_blink);
+	 Task_Enable(task_smotor_right);
+	 Task_Enable(task_smotor_left);
+	 */
 	Task_Enable(task_adc_evaluation);
 
 	counter = HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR0);
@@ -249,14 +251,13 @@ int main(void) {
 
 			sTime.Hours++;
 
-			if (sTime.Hours >= 24) {
-				sTime.Hours = 0;
+			if (sTime.Hours >= 13) {
+				sTime.Hours = 1;
 
 			}
 
 			HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-
-			motor_move_to_kmh(sTime.Hours * 10);
+			motor_move_to(0);
 
 			break;
 
@@ -280,12 +281,126 @@ int main(void) {
 
 			HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 
-			motor_move_to_kmh(0);
-			motor_move_to_kmh(sTime.Hours * 10);
+			motor_move_to(0);
 
 			break;
 		case BTN_NO_EVENT:
 			// Semmi! Hagyd meg az előző állapotot.
+			break;
+		}
+
+		uint16_t test_leds[] = { UZEMANYAGSZINT, DOBFEK, HATSO_ABLAK_FUTES,
+		HATSO_KOD, ELSO_KOD, LEGZSAK_HIBA, HUTOVIZ, POTTY, LEGZSAK_KI,
+		BIZTIOV, IZZITO, NYITOTT_AJTO, ABS, KEZIFEK };
+
+		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+		HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+		switch (sTime.Hours) {
+		case 0:
+
+			set_led(UZEMANYAGSZINT, 0);
+			set_led(DOBFEK, 0);
+			set_led(HATSO_ABLAK_FUTES, 0);
+			set_led( HATSO_KOD, 0);
+			set_led(ELSO_KOD, 0);
+			set_led(LEGZSAK_HIBA, 0);
+			set_led(HUTOVIZ, 0);
+			set_led(POTTY, 0);
+			set_led(LEGZSAK_KI, 0);
+			set_led(BIZTIOV, 0);
+			set_led(IZZITO, 0);
+			set_led(NYITOTT_AJTO, 0);
+			set_led(ABS, 0);
+			set_led(KEZIFEK, 0);
+
+			break;
+
+		case 1:
+
+			set_led(
+			UZEMANYAGSZINT, 100);
+
+			motor_move_to(22);
+
+			break;
+
+		case 2:
+
+			set_led(
+			DOBFEK, 100);
+
+			motor_move_to(38);
+
+			break;
+
+		case 3:
+
+			set_led(
+			HATSO_ABLAK_FUTES, 100);
+
+			motor_move_to(58);
+			break;
+
+		case 4:
+
+			set_led(
+			HATSO_KOD, 100);
+
+			break;
+
+		case 5:
+
+			set_led(
+			ELSO_KOD, 100);
+			break;
+
+		case 6:
+			set_led(
+			LEGZSAK_HIBA, 100);
+
+			break;
+
+		case 7:
+			set_led(
+			HUTOVIZ, 100);
+			break;
+
+		case 8:
+			set_led(
+			POTTY, 100);
+			break;
+
+		case 9:
+			set_led(
+			LEGZSAK_KI, 100);
+			break;
+
+		case 10:
+			set_led(
+			BIZTIOV, 100);
+			break;
+
+		case 11:
+			set_led(
+			IZZITO, 100);
+			break;
+
+		case 12:
+			set_led(
+			NYITOTT_AJTO, 100);
+			break;
+
+		case 13:
+			set_led(
+			ABS, 100);
+			break;
+
+		case 14:
+			set_led(KEZIFEK, 0);
+			break;
+
+		default:
 			break;
 		}
 
@@ -353,31 +468,36 @@ void SystemClock_Config(void) {
 void log_reset_reason(void) {
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST)) { /* log "IWDG reset" */
 
-		set_led(BIZTIOV, 20);
+		set_led(
+		BIZTIOV, 20);
 		write_bit(&My_Error_code, 14, 1);
 
 	}
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_WWDGRST)) { /* log "WWDG reset" */
 
-		set_led(IZZITO, 20);
+		set_led(
+		IZZITO, 20);
 		write_bit(&My_Error_code, 15, 1);
 
 	}
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_LPWRRST)) { /* log "POR reset"  */
 
-		set_led(NYITOTT_AJTO, 20);
+		set_led(
+		NYITOTT_AJTO, 20);
 		write_bit(&My_Error_code, 16, 1);
 
 	}
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST)) { /* log "Software reset" */
 
-		set_led(ABS, 20);
+		set_led(
+		ABS, 20);
 		write_bit(&My_Error_code, 17, 1);
 
 	}
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_PWRRST)) { /* log "BOR reset" */
 
-		set_led(KEZIFEK, 20);
+		set_led(
+		KEZIFEK, 20);
 		write_bit(&My_Error_code, 18, 1);
 
 	}
@@ -393,9 +513,9 @@ uint8_t read_bit(uint32_t value, uint8_t bit_pos) {
 // Adott bit beállítása 0-ra vagy 1-re
 void write_bit(uint32_t *value, uint8_t bit_pos, uint8_t bit_value) {
 	if (bit_value)
-		*value |= (1UL << bit_pos);  // bit beállítása 1-re
+		*value |= (1UL << bit_pos); // bit beállítása 1-re
 	else
-		*value &= ~(1UL << bit_pos);  // bit törlése (0-ra)
+		*value &= ~(1UL << bit_pos); // bit törlése (0-ra)
 }
 
 void show_error() {
@@ -405,94 +525,117 @@ void show_error() {
 
 			switch (i) {
 			case 2:
-				set_led(UZEMANYAGSZINT, 100);
+				set_led(
+				UZEMANYAGSZINT, 100);
 				break;
 
 			case 3:
-				set_led(DOBFEK, 100);
+				set_led(
+				DOBFEK, 100);
 				break;
 
 			case 4:
-				set_led(HATSO_ABLAK_FUTES, 100);
+				set_led(
+				HATSO_ABLAK_FUTES, 100);
 				break;
 
 			case 5:
-				set_led(HUTOVIZ, 100);
+				set_led(
+				HUTOVIZ, 100);
 				break;
 
 			case 6:
-				set_led(POTTY, 100);
+				set_led(
+				POTTY, 100);
 				break;
 
 			case 7:
-				set_led(LEGZSAK_KI, 100);
+				set_led(
+				LEGZSAK_KI, 100);
 				break;
 
 			case 8:
-				set_led(AKSI, 100);
+				set_led(
+				AKSI, 100);
 				break;
 
 			case 9:
-				set_led(AKSI, 10);
+				set_led(
+				AKSI, 10);
 				break;
 
 			case 10:
-				set_led(OLAJNYOMAS, 100);
+				set_led(
+				OLAJNYOMAS, 100);
 				break;
 
 			case 11:
-				set_led(OLAJNYOMAS, 10);
+				set_led(
+				OLAJNYOMAS, 10);
 				break;
 			case 12:
-				set_led(ABLAKOMOSO_SZINT, 100);
+				set_led(
+				ABLAKOMOSO_SZINT, 100);
 				break;
 
 			case 13:
-				set_led(ABLAKOMOSO_SZINT, 10);
+				set_led(
+				ABLAKOMOSO_SZINT, 10);
 				break;
 
 			case 14:
-				set_led(BIZTIOV, 100);
+				set_led(
+				BIZTIOV, 100);
 				break;
 
 			case 15:
-				set_led(IZZITO, 100);
+				set_led(
+				IZZITO, 100);
 				break;
 
 			case 16:
-				set_led(NYITOTT_AJTO, 100);
+				set_led(
+				NYITOTT_AJTO, 100);
 				break;
 
 			case 17:
-				set_led(ABS, 100);
+				set_led(
+				ABS, 100);
 				break;
 
 			case 18:
-				set_led(KEZIFEK, 100);
+				set_led(
+				KEZIFEK, 100);
 				break;
 
 			case 19:
-				set_led(MENETFENY, 100);
+				set_led(
+				MENETFENY, 100);
 				break;
 
 			case 20:
-				set_led(ELSO_KOD, 100);
+				set_led(
+				ELSO_KOD, 100);
 				break;
 
 			case 21:
-				set_led(HATSO_KOD, 100);
+				set_led(
+				HATSO_KOD, 100);
 				break;
 
 			case 22:
-				set_led(INDEX_BALLRA, 100);
+				set_led(
+				INDEX_BALLRA, 100);
 				break;
 
 			case 23:
-				set_led(INDEX_JOBBRA, 100);
+				set_led(
+				INDEX_JOBBRA, 100);
 				break;
 
 			case 24:
-				set_led(LEGZSAK_HIBA, 100);
+				set_led(
+				LEGZSAK_HIBA, 100);
 				break;
 			}
 		}
@@ -518,8 +661,12 @@ void Error_Handler(void) {
 	Task_Disable(task_right_blink);
 //	Task_Disable(task_adc_evaluation);
 
-	HAL_GPIO_WritePin(BOOST_EN_GPIO_Port, BOOST_EN_Pin, 0);
-	HAL_GPIO_WritePin(LEDS_ON_GPIO_Port, LEDS_ON_Pin, 0);
+	HAL_GPIO_WritePin(
+	BOOST_EN_GPIO_Port,
+	BOOST_EN_Pin, 0);
+	HAL_GPIO_WritePin(
+	LEDS_ON_GPIO_Port,
+	LEDS_ON_Pin, 0);
 
 	uint8_t enable_led_driver_usage = 1;
 	uint8_t vaku_led_brightness = 0;
@@ -549,12 +696,14 @@ void Error_Handler(void) {
 
 		if (enable_led_driver_usage == 1) { //not a led driver error init error
 
-			set_led(CHECK_ENGINE, 50);
+			set_led(
+			CHECK_ENGINE, 50);
 			set_vaku_led(vaku_led_brightness);
 
 			HAL_Delay(1000);
 
-			set_led(CHECK_ENGINE, 0);
+			set_led(
+			CHECK_ENGINE, 0);
 			set_vaku_led(0);
 
 			HAL_Delay(1000);

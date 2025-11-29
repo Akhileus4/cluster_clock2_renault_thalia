@@ -17,7 +17,7 @@ typedef struct {
 	int position;
 } kmh_position_map_t;
 
-static const kmh_position_map_t position_map[] = { { 10, 0 }, 	//updated
+static const kmh_position_map_t position_map[] = { { 0, 0 }, { 10, 18 }, //updated
 		{ 20, 19 },		//updated
 		{ 30, 38 }, 	//updated
 		{ 40, 51 }, 	//updated
