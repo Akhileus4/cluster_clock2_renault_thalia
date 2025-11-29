@@ -75,6 +75,8 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+uint32_t counter = 0;
+
 //&&
 //(vbatt_avg < 2669 	&& 	vbatt_avg 	> 4515)
 //    	(usb_avg < 2669 	&& 	usb_avg 	> 3413) &&
@@ -117,6 +119,8 @@ int main(void) {
 	MX_I2C1_Init();
 	MX_CRC_Init();
 	/* USER CODE BEGIN 2 */
+
+	RTC_SetTimeToZero();
 
 	HAL_GPIO_WritePin(LEDS_ON_GPIO_Port, LEDS_ON_Pin, 0);
 	HAL_GPIO_WritePin(BOOST_EN_GPIO_Port, BOOST_EN_Pin, 1);
@@ -166,13 +170,14 @@ int main(void) {
 
 	set_vaku_led(0);
 
-	Task_Enable(task_Big_Motor);
-	Task_Enable(task_Big_Motor);
+	//Task_Enable(task_Big_Motor);
 	Task_Enable(task_left_blink);
 	Task_Enable(task_right_blink);
 	Task_Enable(task_smotor_right);
 	Task_Enable(task_smotor_left);
 	Task_Enable(task_adc_evaluation);
+
+	counter = HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR0);
 
 	HAL_Delay(1000);
 
@@ -196,36 +201,88 @@ int main(void) {
 		 set_led(MENETFENY, 0);
 		 */
 
+		////////////minute button reading
 		switch (Button_Update(&btnMin)) {
 		case BTN_SHORT_PRESSED:
 			set_led(MENETFENY, 10);
+
 			break;
 		case BTN_SHORT_RELEASED:
 			set_led(MENETFENY, 0);
+
 			break;
+
 		case BTN_LONG_PRESSED:
 			set_led(MENETFENY, 100);
+
 			break;
 		case BTN_LONG_RELEASED:
+
 			set_led(MENETFENY, 0);
+
+			// Mindig olvasd ki előbb az aktuális időt
+			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+			sTime.Minutes++;
+
+			if (sTime.Minutes >= 60) {
+				sTime.Minutes = 0;
+			}
+			HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+
 			break;
 		case BTN_NO_EVENT:
 			// Semmi! Hagyd meg az előző állapotot.
 			break;
 		}
 
+		////////////hour button reading
+
 		switch (Button_Update(&btnHour)) {
 		case BTN_SHORT_PRESSED:
 			set_vaku_led(10);
+
+			// Mindig olvasd ki előbb az aktuális időt
+			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+			sTime.Hours++;
+
+			if (sTime.Hours >= 24) {
+				sTime.Hours = 0;
+
+			}
+
+			HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+
+			motor_move_to_kmh(sTime.Hours * 10);
+
 			break;
+
 		case BTN_SHORT_RELEASED:
 			set_vaku_led(0);
+
 			break;
+
 		case BTN_LONG_PRESSED:
 			set_vaku_led(100);
+
 			break;
 		case BTN_LONG_RELEASED:
 			set_vaku_led(0);
+
+			// Mindig olvasd ki előbb az aktuális időt
+			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+			sTime.Hours = 0;
+
+			HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+
+			motor_move_to_kmh(0);
+			motor_move_to_kmh(sTime.Hours * 10);
+
 			break;
 		case BTN_NO_EVENT:
 			// Semmi! Hagyd meg az előző állapotot.
