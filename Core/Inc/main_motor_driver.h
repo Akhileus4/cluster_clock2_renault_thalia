@@ -17,20 +17,20 @@ typedef struct {
 	int position;
 } kmh_position_map_t;
 
-static const kmh_position_map_t position_map[] = { { 0, 0 }, { 10, 18 }, //updated
-		{ 20, 19 },		//updated
-		{ 30, 38 }, 	//updated
-		{ 40, 51 }, 	//updated
-		{ 50, 73 },		//updated
-		{ 60, 90 },		//updated
-		{ 70, 106 }, 	//updated
-		{ 80, 122 }, 	//updated
-		{ 90, 137 }, 	//updated
-		{ 100, 153 }, 	//updated
-		{ 110, 169 }, 	//updated
-		{ 120, 185 }, 	//updated
-		{ 130, 202 }, 	//updated
-		{ 140, 218 }, 	//updated
+static const kmh_position_map_t position_map[] = { { 0, 0 }, { 10, 22 }, //updated
+		{ 20, 40 },		//updated
+		{ 30, 58 }, 	//updated
+		{ 40, 75 }, 	//updated
+		{ 50, 92 },		//updated
+		{ 60, 108 },		//updated
+		{ 70, 125 }, 	//updated
+		{ 80, 140 }, 	//updated
+		{ 90, 157 }, 	//updated
+		{ 100, 172 }, 	//updated
+		{ 110, 189 }, 	//updated
+		{ 120, 205 }, 	//updated
+		{ 130, 210 }, 	//updated
+		{ 140, 230 }, 	//updated
 		{ 150, 238 }, 	//updated
 		{ 160, 253 }, 	//updated
 		{ 170, 270 }, 	//updated

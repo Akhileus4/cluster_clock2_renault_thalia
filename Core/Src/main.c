@@ -397,7 +397,7 @@ int main(void) {
 		case 13:
 			set_led(
 			ABS, 100);
-			motor_move_to(210);
+			motor_move_to(220);
 			break;
 
 		case 14:
