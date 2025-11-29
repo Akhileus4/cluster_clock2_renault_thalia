@@ -57,13 +57,13 @@ void motor_rotate(int direction, int steps) {
 		// Advance phase (modulo handles wrap-around)
 		current_phase = (current_phase + phase_step + num_phases) % num_phases;
 	}
-	/*
-	 // Coast: all inputs low
-	 HAL_GPIO_WritePin(SERVO1_GPIO_Port, SERVO1_Pin, GPIO_PIN_RESET);
-	 HAL_GPIO_WritePin(SERVO2_GPIO_Port, SERVO2_Pin, GPIO_PIN_RESET);
-	 HAL_GPIO_WritePin(SERVO3_GPIO_Port, SERVO3_Pin, GPIO_PIN_RESET);
-	 HAL_GPIO_WritePin(SERVO4_GPIO_Port, SERVO4_Pin, GPIO_PIN_RESET);
-	 */
+	HAL_Delay(1);
+	// Coast: all inputs low
+	HAL_GPIO_WritePin(SERVO1_GPIO_Port, SERVO1_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(SERVO2_GPIO_Port, SERVO2_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(SERVO3_GPIO_Port, SERVO3_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(SERVO4_GPIO_Port, SERVO4_Pin, GPIO_PIN_RESET);
+	HAL_Delay(1);
 }
 
 // Globális változó a motor aktuális abszolút pozíciójához

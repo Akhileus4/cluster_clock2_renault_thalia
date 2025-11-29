@@ -251,9 +251,8 @@ int main(void) {
 
 			sTime.Hours++;
 
-			if (sTime.Hours >= 13) {
-				sTime.Hours = 1;
-
+			if (sTime.Hours >= 24) {
+				sTime.Hours = 0;
 			}
 
 			HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
@@ -288,10 +287,6 @@ int main(void) {
 			// Semmi! Hagyd meg az előző állapotot.
 			break;
 		}
-
-		uint16_t test_leds[] = { UZEMANYAGSZINT, DOBFEK, HATSO_ABLAK_FUTES,
-		HATSO_KOD, ELSO_KOD, LEGZSAK_HIBA, HUTOVIZ, POTTY, LEGZSAK_KI,
-		BIZTIOV, IZZITO, NYITOTT_AJTO, ABS, KEZIFEK };
 
 		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
 		HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
@@ -330,7 +325,7 @@ int main(void) {
 			set_led(
 			DOBFEK, 100);
 
-			motor_move_to(38);
+			motor_move_to(40);
 
 			break;
 
@@ -346,6 +341,7 @@ int main(void) {
 
 			set_led(
 			HATSO_KOD, 100);
+			motor_move_to(75);
 
 			break;
 
@@ -353,51 +349,60 @@ int main(void) {
 
 			set_led(
 			ELSO_KOD, 100);
+			motor_move_to(92);
 			break;
 
 		case 6:
 			set_led(
 			LEGZSAK_HIBA, 100);
-
+			motor_move_to(108);
 			break;
 
 		case 7:
 			set_led(
 			HUTOVIZ, 100);
+			motor_move_to(125);
 			break;
 
 		case 8:
 			set_led(
 			POTTY, 100);
+			motor_move_to(140);
 			break;
 
 		case 9:
 			set_led(
 			LEGZSAK_KI, 100);
+			motor_move_to(157);
 			break;
 
 		case 10:
 			set_led(
 			BIZTIOV, 100);
+			motor_move_to(172);
 			break;
 
 		case 11:
 			set_led(
 			IZZITO, 100);
+			motor_move_to(189);
 			break;
 
 		case 12:
 			set_led(
 			NYITOTT_AJTO, 100);
+			motor_move_to(205);
 			break;
 
 		case 13:
 			set_led(
 			ABS, 100);
+			motor_move_to(210);
 			break;
 
 		case 14:
 			set_led(KEZIFEK, 0);
+			motor_move_to(230);
 			break;
 
 		default:
