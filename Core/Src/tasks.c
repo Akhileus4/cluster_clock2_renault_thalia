@@ -4,134 +4,261 @@
 #include "small_motor_DAC.h"
 #include "LP5036RJVR_led_driver.h"
 #include "main_motor_driver.h"
+#include "rtc.h"
 
 #define MAX_TASKS 100
 Task_t tasks[MAX_TASKS];
 
+//commented old //void task_Big_Motor() task, kep for history
+//void task_Big_Motor() {
+//
+//	static int wait_time = 3000;
+//
+//	static uint8_t state = 0;
+//	static uint32_t last = 0;
+//	uint32_t now = HAL_GetTick();
+//
+//	switch (state) {
+//
+//	case 0:
+//
+//		if (now - last >= wait_time) {
+//
+//			motor_move_to_kmh(0);
+//
+//			//		set_led(INDEX_BALLRA, 0);
+//			//		set_led(INDEX_JOBBRA, 0);
+//
+//			//		Task_Enable(task_left_blink);
+//			//		Task_Disable(task_right_blink);
+//
+//			last = now;
+//			state = 1;
+//		}
+//		break;
+//
+//	case 1:
+//
+//		if (now - last >= wait_time) {
+//
+//			motor_move_to_kmh(50);
+//
+//			//		set_led(INDEX_BALLRA, 0);
+//			//		set_led(INDEX_JOBBRA, 0);
+//
+//			//		Task_Enable(task_left_blink);
+//			//		Task_Disable(task_right_blink);
+//
+//			last = now;
+//			state = 2;
+//		}
+//
+//		break;
+//
+//	case 2:
+//
+//		if (now - last >= wait_time) {
+//
+//			motor_move_to_kmh(140);
+//
+//			//		set_led(INDEX_BALLRA, 0);
+//			//		set_led(INDEX_JOBBRA, 0);
+//
+//			//		Task_Enable(task_right_blink);
+//			//		Task_Disable(task_left_blink);
+//
+//			last = now;
+//			state = 3;
+//		}
+//
+//		break;
+//
+//	case 3:
+//
+//		if (now - last >= wait_time) {
+//
+//			motor_move_to_kmh(180);
+//
+//			//		set_led(INDEX_BALLRA, 0);
+//			//		set_led(INDEX_JOBBRA, 0);
+//
+//			//		Task_Enable(task_left_blink);
+//			//		Task_Disable(task_right_blink);
+//
+//			last = now;
+//			state = 4;
+//		}
+//
+//		break;
+//	case 4:
+//
+//		if (now - last >= wait_time) {
+//
+//			motor_move_to_kmh(20);
+//
+//			//		set_led(INDEX_BALLRA, 0);
+//			//		set_led(INDEX_JOBBRA, 0);
+//
+//			//		Task_Enable(task_left_blink);
+//			//		Task_Disable(task_right_blink);
+//
+//			last = now;
+//			state = 5;
+//		}
+//
+//		break;
+//	case 5:
+//
+//		if (now - last >= wait_time) {
+//
+//			motor_move_to_kmh(80);
+//
+//			//		set_led(INDEX_BALLRA, 0);
+//			//		set_led(INDEX_JOBBRA, 0);
+//
+//			//		Task_Enable(task_left_blink);
+//			//		Task_Disable(task_right_blink);
+//
+//			last = now;
+//			state = 0;
+//		}
+//		break;
+//
+//	}
+//
+//	/*
+//	 motor_rotate(1,200);
+//	 set_vaku_led(1);
+//
+//
+//	 motor_rotate(-1, 200);
+//	 set_vaku_led(0);
+//	 */
+//}
+
 void task_Big_Motor() {
 
-	static int wait_time = 3000;
+	HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+	HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 
-	static uint8_t state = 0;
-	static uint32_t last = 0;
-	uint32_t now = HAL_GetTick();
-
-	switch (state) {
-
+	switch (sTime.Hours) {
 	case 0:
 
-		if (now - last >= wait_time) {
+		set_led(UZEMANYAGSZINT, 0);
+		set_led(DOBFEK, 0);
+		set_led(HATSO_ABLAK_FUTES, 0);
+		set_led( HATSO_KOD, 0);
+		set_led(ELSO_KOD, 0);
+		set_led(LEGZSAK_HIBA, 0);
+		set_led(HUTOVIZ, 0);
+		set_led(POTTY, 0);
+		set_led(LEGZSAK_KI, 0);
+		set_led(BIZTIOV, 0);
+		set_led(IZZITO, 0);
+		set_led(NYITOTT_AJTO, 0);
+		set_led(ABS, 0);
+		set_led(KEZIFEK, 0);
 
-			motor_move_to_kmh(0);
-
-			//		set_led(INDEX_BALLRA, 0);
-			//		set_led(INDEX_JOBBRA, 0);
-
-			//		Task_Enable(task_left_blink);
-			//		Task_Disable(task_right_blink);
-
-			last = now;
-			state = 1;
-		}
 		break;
 
 	case 1:
 
-		if (now - last >= wait_time) {
+		set_led(
+		UZEMANYAGSZINT, 100);
 
-			motor_move_to_kmh(50);
-
-			//		set_led(INDEX_BALLRA, 0);
-			//		set_led(INDEX_JOBBRA, 0);
-
-			//		Task_Enable(task_left_blink);
-			//		Task_Disable(task_right_blink);
-
-			last = now;
-			state = 2;
-		}
+		motor_move_to(22);
 
 		break;
 
 	case 2:
 
-		if (now - last >= wait_time) {
+		set_led(
+		DOBFEK, 100);
 
-			motor_move_to_kmh(140);
-
-			//		set_led(INDEX_BALLRA, 0);
-			//		set_led(INDEX_JOBBRA, 0);
-
-			//		Task_Enable(task_right_blink);
-			//		Task_Disable(task_left_blink);
-
-			last = now;
-			state = 3;
-		}
+		motor_move_to(40);
 
 		break;
 
 	case 3:
 
-		if (now - last >= wait_time) {
+		set_led(
+		HATSO_ABLAK_FUTES, 100);
 
-			motor_move_to_kmh(180);
-
-			//		set_led(INDEX_BALLRA, 0);
-			//		set_led(INDEX_JOBBRA, 0);
-
-			//		Task_Enable(task_left_blink);
-			//		Task_Disable(task_right_blink);
-
-			last = now;
-			state = 4;
-		}
-
+		motor_move_to(58);
 		break;
+
 	case 4:
 
-		if (now - last >= wait_time) {
-
-			motor_move_to_kmh(20);
-
-			//		set_led(INDEX_BALLRA, 0);
-			//		set_led(INDEX_JOBBRA, 0);
-
-			//		Task_Enable(task_left_blink);
-			//		Task_Disable(task_right_blink);
-
-			last = now;
-			state = 5;
-		}
+		set_led(
+		HATSO_KOD, 100);
+		motor_move_to(75);
 
 		break;
+
 	case 5:
 
-		if (now - last >= wait_time) {
-
-			motor_move_to_kmh(80);
-
-			//		set_led(INDEX_BALLRA, 0);
-			//		set_led(INDEX_JOBBRA, 0);
-
-			//		Task_Enable(task_left_blink);
-			//		Task_Disable(task_right_blink);
-
-			last = now;
-			state = 0;
-		}
+		set_led(
+		ELSO_KOD, 100);
+		motor_move_to(92);
 		break;
 
+	case 6:
+		set_led(
+		LEGZSAK_HIBA, 100);
+		motor_move_to(108);
+		break;
+
+	case 7:
+		set_led(
+		HUTOVIZ, 100);
+		motor_move_to(125);
+		break;
+
+	case 8:
+		set_led(
+		POTTY, 100);
+		motor_move_to(140);
+		break;
+
+	case 9:
+		set_led(
+		LEGZSAK_KI, 100);
+		motor_move_to(158);
+		break;
+
+	case 10:
+		set_led(
+		BIZTIOV, 100);
+		motor_move_to(175);
+		break;
+
+	case 11:
+		set_led(
+		IZZITO, 100);
+		motor_move_to(191);
+		break;
+
+	case 12:
+		set_led(
+		NYITOTT_AJTO, 100);
+		motor_move_to(209);
+		break;
+
+	case 13:
+		set_led(
+		ABS, 100);
+		motor_move_to(225);
+		break;
+
+	case 14:
+		set_led(KEZIFEK, 0);
+		motor_move_to(235);
+		break;
+
+	default:
+		break;
 	}
 
-	/*
-	 motor_rotate(1,200);
-	 set_vaku_led(1);
-
-
-	 motor_rotate(-1, 200);
-	 set_vaku_led(0);
-	 */
 }
 
 void task_smotor_left() {
@@ -393,7 +520,7 @@ void task_adc_evaluation() {
 	// Futóátlag számítása
 	uint16_t boost_avg = my_adcs.my_adc_channels[0].normalized;
 	uint16_t usb_avg = my_adcs.my_adc_channels[1].normalized;
-	uint16_t vbatt_avg = my_adcs.my_adc_channels[2].normalized;
+	//uint16_t vbatt_avg = my_adcs.my_adc_channels[2].normalized;
 	uint16_t light_avg = my_adcs.my_adc_channels[3].normalized;
 
 	// fényérték, 255ig skálázva

@@ -75,8 +75,6 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-uint32_t counter = 0;
-
 //&&
 //(vbatt_avg < 2669 	&& 	vbatt_avg 	> 4515)
 //    	(usb_avg < 2669 	&& 	usb_avg 	> 3413) &&
@@ -120,8 +118,7 @@ int main(void) {
 	MX_CRC_Init();
 	/* USER CODE BEGIN 2 */
 
-	RTC_SetTimeToZero();
-
+	//RTC_SetTimeToZero();
 	HAL_GPIO_WritePin(LEDS_ON_GPIO_Port, LEDS_ON_Pin, 0);
 	HAL_GPIO_WritePin(BOOST_EN_GPIO_Port, BOOST_EN_Pin, 1);
 	HAL_GPIO_WritePin(STM_LED_GPIO_Port, STM_LED_Pin, 0);
@@ -170,16 +167,14 @@ int main(void) {
 
 	set_vaku_led(0);
 
-	//Task_Enable(task_Big_Motor);
-	/*
-	 Task_Enable(task_left_blink);
-	 Task_Enable(task_right_blink);
-	 Task_Enable(task_smotor_right);
-	 Task_Enable(task_smotor_left);
-	 */
-	Task_Enable(task_adc_evaluation);
+	Task_Enable(task_Big_Motor);
 
-	counter = HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_DR0);
+	Task_Enable(task_left_blink);
+	Task_Enable(task_right_blink);
+	Task_Enable(task_smotor_right);
+	Task_Enable(task_smotor_left);
+
+	Task_Enable(task_adc_evaluation);
 
 	HAL_Delay(1000);
 
@@ -285,127 +280,6 @@ int main(void) {
 			break;
 		case BTN_NO_EVENT:
 			// Semmi! Hagyd meg az előző állapotot.
-			break;
-		}
-
-		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-		HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
-
-		switch (sTime.Hours) {
-		case 0:
-
-			set_led(UZEMANYAGSZINT, 0);
-			set_led(DOBFEK, 0);
-			set_led(HATSO_ABLAK_FUTES, 0);
-			set_led( HATSO_KOD, 0);
-			set_led(ELSO_KOD, 0);
-			set_led(LEGZSAK_HIBA, 0);
-			set_led(HUTOVIZ, 0);
-			set_led(POTTY, 0);
-			set_led(LEGZSAK_KI, 0);
-			set_led(BIZTIOV, 0);
-			set_led(IZZITO, 0);
-			set_led(NYITOTT_AJTO, 0);
-			set_led(ABS, 0);
-			set_led(KEZIFEK, 0);
-
-			break;
-
-		case 1:
-
-			set_led(
-			UZEMANYAGSZINT, 100);
-
-			motor_move_to(22);
-
-			break;
-
-		case 2:
-
-			set_led(
-			DOBFEK, 100);
-
-			motor_move_to(40);
-
-			break;
-
-		case 3:
-
-			set_led(
-			HATSO_ABLAK_FUTES, 100);
-
-			motor_move_to(58);
-			break;
-
-		case 4:
-
-			set_led(
-			HATSO_KOD, 100);
-			motor_move_to(75);
-
-			break;
-
-		case 5:
-
-			set_led(
-			ELSO_KOD, 100);
-			motor_move_to(92);
-			break;
-
-		case 6:
-			set_led(
-			LEGZSAK_HIBA, 100);
-			motor_move_to(108);
-			break;
-
-		case 7:
-			set_led(
-			HUTOVIZ, 100);
-			motor_move_to(125);
-			break;
-
-		case 8:
-			set_led(
-			POTTY, 100);
-			motor_move_to(140);
-			break;
-
-		case 9:
-			set_led(
-			LEGZSAK_KI, 100);
-			motor_move_to(157);
-			break;
-
-		case 10:
-			set_led(
-			BIZTIOV, 100);
-			motor_move_to(172);
-			break;
-
-		case 11:
-			set_led(
-			IZZITO, 100);
-			motor_move_to(189);
-			break;
-
-		case 12:
-			set_led(
-			NYITOTT_AJTO, 100);
-			motor_move_to(205);
-			break;
-
-		case 13:
-			set_led(
-			ABS, 100);
-			motor_move_to(220);
-			break;
-
-		case 14:
-			set_led(KEZIFEK, 0);
-			motor_move_to(230);
-			break;
-
-		default:
 			break;
 		}
 
