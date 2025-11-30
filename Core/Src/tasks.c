@@ -263,9 +263,10 @@ void task_Big_Motor() {
 
 void task_smotor_left() {
 
-	static uint8_t state = 0;
-	static uint32_t last = 0;
+	uint8_t state = 0;
+	uint32_t last = 0;
 	uint32_t now = HAL_GetTick();
+
 	static int wait_time = 2000;
 
 	switch (state) {
@@ -338,9 +339,10 @@ void task_smotor_left() {
 
 void task_smotor_right() {
 
-	static uint8_t state = 0;
-	static uint32_t last = 0;
+	uint8_t state = 0;
+	uint32_t last = 0;
 	uint32_t now = HAL_GetTick();
+
 	static int wait_time = 1000;
 
 	switch (state) {
@@ -415,8 +417,8 @@ void task_left_blink() {
 
 	static int wait_time = 333;
 
-	static uint8_t state = 0;
-	static uint32_t last = 0;
+	uint8_t state = 0;
+	uint32_t last = 0;
 	uint32_t now = HAL_GetTick();
 
 	switch (state) {
@@ -463,8 +465,8 @@ void task_right_blink() {
 
 	static int wait_time = 333;
 
-	static uint8_t state = 0;
-	static uint32_t last = 0;
+	uint8_t state = 0;
+	uint32_t last = 0;
 	uint32_t now = HAL_GetTick();
 
 	switch (state) {
@@ -563,27 +565,27 @@ void Task_Init(void) {
 		Error_Handler();
 	}
 
-	if (Task_Add(task_Big_Motor, 100) != HAL_OK) {
+	if (Task_Add(task_Big_Motor, 10) != HAL_OK) {
 		write_bit(&My_Error_code, 19, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_smotor_left, 100) != HAL_OK) {
+	if (Task_Add(task_smotor_left, 10) != HAL_OK) {
 		write_bit(&My_Error_code, 20, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_smotor_right, 100) != HAL_OK) {
+	if (Task_Add(task_smotor_right, 10) != HAL_OK) {
 		write_bit(&My_Error_code, 21, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_left_blink, 100) != HAL_OK) {
+	if (Task_Add(task_left_blink, 10) != HAL_OK) {
 		write_bit(&My_Error_code, 22, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_right_blink, 100) != HAL_OK) {
+	if (Task_Add(task_right_blink, 10) != HAL_OK) {
 		write_bit(&My_Error_code, 23, 1);
 		Error_Handler();
 

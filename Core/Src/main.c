@@ -166,6 +166,7 @@ int main(void) {
 	set_vaku_led(0);
 
 	Task_Init();
+
 	Task_Enable(task_Big_Motor);
 	Task_Enable(task_left_blink);
 	Task_Enable(task_right_blink);
