@@ -126,8 +126,6 @@ int main(void) {
 
 	HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1); //timer start for vaku led
 
-	Task_Init();
-
 //LED init
 	if (led_driver_init() != HAL_OK) {
 		write_bit(&My_Error_code, 0, 1);
@@ -167,13 +165,12 @@ int main(void) {
 
 	set_vaku_led(0);
 
+	Task_Init();
 	Task_Enable(task_Big_Motor);
-
 	Task_Enable(task_left_blink);
 	Task_Enable(task_right_blink);
 	Task_Enable(task_smotor_right);
 	Task_Enable(task_smotor_left);
-
 	Task_Enable(task_adc_evaluation);
 
 	HAL_Delay(1000);
@@ -264,6 +261,7 @@ int main(void) {
 			set_vaku_led(100);
 
 			break;
+
 		case BTN_LONG_RELEASED:
 			set_vaku_led(0);
 

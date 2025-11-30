@@ -6,7 +6,7 @@
 #include "main_motor_driver.h"
 #include "rtc.h"
 
-#define MAX_TASKS 100
+#define MAX_TASKS 200
 Task_t tasks[MAX_TASKS];
 
 //commented old //void task_Big_Motor() task, kep for history
