@@ -5,14 +5,15 @@
 #include "LP5036RJVR_led_driver.h"
 #include "main_motor_driver.h"
 #include "rtc.h"
+#include "button.h"
 
-#define MAX_TASKS 200
+#define MAX_TASKS 10
 Task_t tasks[MAX_TASKS];
 
 //commented old //void task_Big_Motor() task, kep for history
 //void task_Big_Motor() {
 //
-//	static int wait_time = 3000;
+//	uint32_t wait_time = 3000;
 //
 //	static uint8_t state = 0;
 //	static uint32_t last = 0;
@@ -135,6 +136,93 @@ Task_t tasks[MAX_TASKS];
 //	 set_vaku_led(0);
 //	 */
 //}
+
+void task_buttons() {
+	////////////minute button reading
+	switch (Button_Update(&btnMin)) {
+	case BTN_SHORT_PRESSED:
+		set_led(MENETFENY, 10);
+
+		break;
+	case BTN_SHORT_RELEASED:
+		set_led(MENETFENY, 0);
+
+		break;
+
+	case BTN_LONG_PRESSED:
+		set_led(MENETFENY, 100);
+
+		break;
+	case BTN_LONG_RELEASED:
+
+		set_led(MENETFENY, 0);
+
+		// Mindig olvasd ki előbb az aktuális időt
+		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+		HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+		sTime.Minutes++;
+
+		if (sTime.Minutes >= 60) {
+			sTime.Minutes = 0;
+		}
+		HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+
+		break;
+	case BTN_NO_EVENT:
+		// Semmi! Hagyd meg az előző állapotot.
+		break;
+	}
+
+	////////////hour button reading
+
+	switch (Button_Update(&btnHour)) {
+	case BTN_SHORT_PRESSED:
+		set_vaku_led(10);
+		// Mindig olvasd ki előbb az aktuális időt
+		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+		HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+		sTime.Hours++;
+
+		if (sTime.Hours >= 24) {
+			sTime.Hours = 0;
+		}
+
+		HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+		motor_move_to(0);
+
+		break;
+
+	case BTN_SHORT_RELEASED:
+		set_vaku_led(0);
+
+		break;
+
+	case BTN_LONG_PRESSED:
+		set_vaku_led(100);
+
+		break;
+
+	case BTN_LONG_RELEASED:
+		set_vaku_led(0);
+
+		// Mindig olvasd ki előbb az aktuális időt
+		HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+		HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+		sTime.Hours = 0;
+
+		HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+
+		motor_move_to(0);
+
+		break;
+	case BTN_NO_EVENT:
+		// Semmi! Hagyd meg az előző állapotot.
+		break;
+	}
+}
 
 void task_Big_Motor() {
 
@@ -267,7 +355,7 @@ void task_smotor_left() {
 	uint32_t last = 0;
 	uint32_t now = HAL_GetTick();
 
-	static int wait_time = 2000;
+	uint32_t wait_time = 2000;
 
 	switch (state) {
 	case 0:
@@ -343,7 +431,7 @@ void task_smotor_right() {
 	uint32_t last = 0;
 	uint32_t now = HAL_GetTick();
 
-	static int wait_time = 1000;
+	uint32_t wait_time = 1000;
 
 	switch (state) {
 	case 0:
@@ -415,7 +503,7 @@ void task_smotor_right() {
 
 void task_left_blink() {
 
-	static int wait_time = 333;
+	uint32_t wait_time = 333;
 
 	uint8_t state = 0;
 	uint32_t last = 0;
@@ -463,7 +551,7 @@ void task_left_blink() {
 
 void task_right_blink() {
 
-	static int wait_time = 333;
+	uint32_t wait_time = 333;
 
 	uint8_t state = 0;
 	uint32_t last = 0;
@@ -552,6 +640,8 @@ void task_adc_evaluation() {
 	 */
 }
 
+//////////////////////////////functions////////////////////////////
+
 void Task_Init(void) {
 	for (int i = 0; i < MAX_TASKS; i++) {
 		tasks[i].taskFunc = NULL;
@@ -565,37 +655,41 @@ void Task_Init(void) {
 		Error_Handler();
 	}
 
-	if (Task_Add(task_Big_Motor, 10) != HAL_OK) {
+	if (Task_Add(task_Big_Motor, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 19, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_smotor_left, 10) != HAL_OK) {
+	if (Task_Add(task_smotor_left, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 20, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_smotor_right, 10) != HAL_OK) {
+	if (Task_Add(task_smotor_right, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 21, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_left_blink, 10) != HAL_OK) {
+	if (Task_Add(task_left_blink, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 22, 1);
 		Error_Handler();
 	}
 
-	if (Task_Add(task_right_blink, 10) != HAL_OK) {
+	if (Task_Add(task_right_blink, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 23, 1);
 		Error_Handler();
 
 	}
 
-	if (Task_Add(task_adc_evaluation, 10) != HAL_OK) {
+	if (Task_Add(task_adc_evaluation, 100) != HAL_OK) {
 		write_bit(&My_Error_code, 25, 1);
 		Error_Handler();
 	}
+
+	Task_Add(task_buttons, 100);
 }
+
+//////////////
 
 int Task_Add(void (*func)(void), uint32_t period) {
 
@@ -654,4 +748,185 @@ void Task_Dispatch(void) {
 			}
 		}
 	}
+}
+
+void log_reset_reason(void) {
+	if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST)) { /* log "IWDG reset" */
+
+		set_led(
+		BIZTIOV, 20);
+		write_bit(&My_Error_code, 14, 1);
+
+	}
+	if (__HAL_RCC_GET_FLAG(RCC_FLAG_WWDGRST)) { /* log "WWDG reset" */
+
+		set_led(
+		IZZITO, 20);
+		write_bit(&My_Error_code, 15, 1);
+
+	}
+	if (__HAL_RCC_GET_FLAG(RCC_FLAG_LPWRRST)) { /* log "POR reset"  */
+
+		set_led(
+		NYITOTT_AJTO, 20);
+		write_bit(&My_Error_code, 16, 1);
+
+	}
+	if (__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST)) { /* log "Software reset" */
+
+		set_led(
+		ABS, 20);
+		write_bit(&My_Error_code, 17, 1);
+
+	}
+	if (__HAL_RCC_GET_FLAG(RCC_FLAG_PWRRST)) { /* log "BOR reset" */
+
+		set_led(
+		KEZIFEK, 20);
+		write_bit(&My_Error_code, 18, 1);
+
+	}
+	__HAL_RCC_CLEAR_RESET_FLAGS();
+
+}
+
+// Adott bit értékének kiolvasása (0 vagy 1)
+uint8_t read_bit(uint32_t value, uint8_t bit_pos) {
+	return (value >> bit_pos) & 0x1;
+}
+
+// Adott bit beállítása 0-ra vagy 1-re
+void write_bit(uint32_t *value, uint8_t bit_pos, uint8_t bit_value) {
+	if (bit_value)
+		*value |= (1UL << bit_pos); // bit beállítása 1-re
+	else
+		*value &= ~(1UL << bit_pos); // bit törlése (0-ra)
+}
+
+void show_error() {
+
+	for (int i = 2; i <= 24; i++) {
+		if (read_bit(My_Error_code, i)) {
+
+			switch (i) {
+			case 2:
+				set_led(
+				UZEMANYAGSZINT, 100);
+				break;
+
+			case 3:
+				set_led(
+				DOBFEK, 100);
+				break;
+
+			case 4:
+				set_led(
+				HATSO_ABLAK_FUTES, 100);
+				break;
+
+			case 5:
+				set_led(
+				HUTOVIZ, 100);
+				break;
+
+			case 6:
+				set_led(
+				POTTY, 100);
+				break;
+
+			case 7:
+				set_led(
+				LEGZSAK_KI, 100);
+				break;
+
+			case 8:
+				set_led(
+				AKSI, 100);
+				break;
+
+			case 9:
+				set_led(
+				AKSI, 10);
+				break;
+
+			case 10:
+				set_led(
+				OLAJNYOMAS, 100);
+				break;
+
+			case 11:
+				set_led(
+				OLAJNYOMAS, 10);
+				break;
+			case 12:
+				set_led(
+				ABLAKOMOSO_SZINT, 100);
+				break;
+
+			case 13:
+				set_led(
+				ABLAKOMOSO_SZINT, 10);
+				break;
+
+			case 14:
+				set_led(
+				BIZTIOV, 100);
+				break;
+
+			case 15:
+				set_led(
+				IZZITO, 100);
+				break;
+
+			case 16:
+				set_led(
+				NYITOTT_AJTO, 100);
+				break;
+
+			case 17:
+				set_led(
+				ABS, 100);
+				break;
+
+			case 18:
+				set_led(
+				KEZIFEK, 100);
+				break;
+
+			case 19:
+				set_led(
+				MENETFENY, 100);
+				break;
+
+			case 20:
+				set_led(
+				ELSO_KOD, 100);
+				break;
+
+			case 21:
+				set_led(
+				HATSO_KOD, 100);
+				break;
+
+			case 22:
+				set_led(
+				INDEX_BALLRA, 100);
+				break;
+
+			case 23:
+				set_led(
+				INDEX_JOBBRA, 100);
+				break;
+
+			case 24:
+				set_led(
+				LEGZSAK_HIBA, 100);
+				break;
+			}
+		}
+	}
+}
+
+void HAL_SYSTICK_Callback(void) {
+
 }

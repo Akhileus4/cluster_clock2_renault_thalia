@@ -30,6 +30,7 @@ void task_right_blink();
 void task_smotor_right();
 void task_smotor_left();
 void task_adc_evaluation();
+void task_buttons();
 
 /*task definiciós template
  *

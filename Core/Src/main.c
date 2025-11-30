@@ -157,7 +157,6 @@ int main(void) {
 
 	set_background_brightness(100);
 
-//  motor inits
 	motor_init();
 
 	Button_Init(&btnMin, MINUTE_GPIO_Port, MINUTE_Pin);
@@ -168,11 +167,12 @@ int main(void) {
 	Task_Init();
 
 	Task_Enable(task_Big_Motor);
-	Task_Enable(task_left_blink);
-	Task_Enable(task_right_blink);
-	Task_Enable(task_smotor_right);
-	Task_Enable(task_smotor_left);
+//	Task_Enable(task_left_blink);
+	//	Task_Enable(task_right_blink);
+	//	Task_Enable(task_smotor_right);
+	//	Task_Enable(task_smotor_left);
 	Task_Enable(task_adc_evaluation);
+	Task_Enable(task_buttons);
 
 	HAL_Delay(1000);
 
@@ -184,103 +184,6 @@ int main(void) {
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-		/*
-		 if (!HAL_GPIO_ReadPin(HOUR_GPIO_Port, HOUR_Pin)) {
-		 set_vaku_led(100);
-		 } else {
-		 set_vaku_led(0);
-		 }
-		 if (!HAL_GPIO_ReadPin(MINUTE_GPIO_Port, MINUTE_Pin)) {
-		 set_led(MENETFENY, 100);
-		 } else
-		 set_led(MENETFENY, 0);
-		 */
-
-		////////////minute button reading
-		switch (Button_Update(&btnMin)) {
-		case BTN_SHORT_PRESSED:
-			set_led(MENETFENY, 10);
-
-			break;
-		case BTN_SHORT_RELEASED:
-			set_led(MENETFENY, 0);
-
-			break;
-
-		case BTN_LONG_PRESSED:
-			set_led(MENETFENY, 100);
-
-			break;
-		case BTN_LONG_RELEASED:
-
-			set_led(MENETFENY, 0);
-
-			// Mindig olvasd ki előbb az aktuális időt
-			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
-
-			sTime.Minutes++;
-
-			if (sTime.Minutes >= 60) {
-				sTime.Minutes = 0;
-			}
-			HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-
-			break;
-		case BTN_NO_EVENT:
-			// Semmi! Hagyd meg az előző állapotot.
-			break;
-		}
-
-		////////////hour button reading
-
-		switch (Button_Update(&btnHour)) {
-		case BTN_SHORT_PRESSED:
-			set_vaku_led(10);
-
-			// Mindig olvasd ki előbb az aktuális időt
-			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
-
-			sTime.Hours++;
-
-			if (sTime.Hours >= 24) {
-				sTime.Hours = 0;
-			}
-
-			HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-			motor_move_to(0);
-
-			break;
-
-		case BTN_SHORT_RELEASED:
-			set_vaku_led(0);
-
-			break;
-
-		case BTN_LONG_PRESSED:
-			set_vaku_led(100);
-
-			break;
-
-		case BTN_LONG_RELEASED:
-			set_vaku_led(0);
-
-			// Mindig olvasd ki előbb az aktuális időt
-			HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-			HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
-
-			sTime.Hours = 0;
-
-			HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-
-			motor_move_to(0);
-
-			break;
-		case BTN_NO_EVENT:
-			// Semmi! Hagyd meg az előző állapotot.
-			break;
-		}
 
 		Task_Dispatch();
 
@@ -342,187 +245,6 @@ void SystemClock_Config(void) {
 }
 
 /* USER CODE BEGIN 4 */
-
-void log_reset_reason(void) {
-	if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST)) { /* log "IWDG reset" */
-
-		set_led(
-		BIZTIOV, 20);
-		write_bit(&My_Error_code, 14, 1);
-
-	}
-	if (__HAL_RCC_GET_FLAG(RCC_FLAG_WWDGRST)) { /* log "WWDG reset" */
-
-		set_led(
-		IZZITO, 20);
-		write_bit(&My_Error_code, 15, 1);
-
-	}
-	if (__HAL_RCC_GET_FLAG(RCC_FLAG_LPWRRST)) { /* log "POR reset"  */
-
-		set_led(
-		NYITOTT_AJTO, 20);
-		write_bit(&My_Error_code, 16, 1);
-
-	}
-	if (__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST)) { /* log "Software reset" */
-
-		set_led(
-		ABS, 20);
-		write_bit(&My_Error_code, 17, 1);
-
-	}
-	if (__HAL_RCC_GET_FLAG(RCC_FLAG_PWRRST)) { /* log "BOR reset" */
-
-		set_led(
-		KEZIFEK, 20);
-		write_bit(&My_Error_code, 18, 1);
-
-	}
-	__HAL_RCC_CLEAR_RESET_FLAGS();
-
-}
-
-// Adott bit értékének kiolvasása (0 vagy 1)
-uint8_t read_bit(uint32_t value, uint8_t bit_pos) {
-	return (value >> bit_pos) & 0x1;
-}
-
-// Adott bit beállítása 0-ra vagy 1-re
-void write_bit(uint32_t *value, uint8_t bit_pos, uint8_t bit_value) {
-	if (bit_value)
-		*value |= (1UL << bit_pos); // bit beállítása 1-re
-	else
-		*value &= ~(1UL << bit_pos); // bit törlése (0-ra)
-}
-
-void show_error() {
-
-	for (int i = 2; i <= 24; i++) {
-		if (read_bit(My_Error_code, i)) {
-
-			switch (i) {
-			case 2:
-				set_led(
-				UZEMANYAGSZINT, 100);
-				break;
-
-			case 3:
-				set_led(
-				DOBFEK, 100);
-				break;
-
-			case 4:
-				set_led(
-				HATSO_ABLAK_FUTES, 100);
-				break;
-
-			case 5:
-				set_led(
-				HUTOVIZ, 100);
-				break;
-
-			case 6:
-				set_led(
-				POTTY, 100);
-				break;
-
-			case 7:
-				set_led(
-				LEGZSAK_KI, 100);
-				break;
-
-			case 8:
-				set_led(
-				AKSI, 100);
-				break;
-
-			case 9:
-				set_led(
-				AKSI, 10);
-				break;
-
-			case 10:
-				set_led(
-				OLAJNYOMAS, 100);
-				break;
-
-			case 11:
-				set_led(
-				OLAJNYOMAS, 10);
-				break;
-			case 12:
-				set_led(
-				ABLAKOMOSO_SZINT, 100);
-				break;
-
-			case 13:
-				set_led(
-				ABLAKOMOSO_SZINT, 10);
-				break;
-
-			case 14:
-				set_led(
-				BIZTIOV, 100);
-				break;
-
-			case 15:
-				set_led(
-				IZZITO, 100);
-				break;
-
-			case 16:
-				set_led(
-				NYITOTT_AJTO, 100);
-				break;
-
-			case 17:
-				set_led(
-				ABS, 100);
-				break;
-
-			case 18:
-				set_led(
-				KEZIFEK, 100);
-				break;
-
-			case 19:
-				set_led(
-				MENETFENY, 100);
-				break;
-
-			case 20:
-				set_led(
-				ELSO_KOD, 100);
-				break;
-
-			case 21:
-				set_led(
-				HATSO_KOD, 100);
-				break;
-
-			case 22:
-				set_led(
-				INDEX_BALLRA, 100);
-				break;
-
-			case 23:
-				set_led(
-				INDEX_JOBBRA, 100);
-				break;
-
-			case 24:
-				set_led(
-				LEGZSAK_HIBA, 100);
-				break;
-			}
-		}
-	}
-}
-
-void HAL_SYSTICK_Callback(void) {
-
-}
 
 /* USER CODE END 4 */
 

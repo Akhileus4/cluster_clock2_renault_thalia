@@ -25,6 +25,9 @@ typedef struct {
 
 #define LONG_PRESS_TIME_MS   5000   // 5 seconds
 
+extern Button_t btnHour;
+extern Button_t btnMin;
+
 void Button_Init(Button_t *btn, GPIO_TypeDef *PORT, uint16_t PIN);
 ButtonEvent_t Button_Update(Button_t *btn);
 
